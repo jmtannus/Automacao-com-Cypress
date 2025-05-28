@@ -1,0 +1,26 @@
+{
+  "name": "automacao-com-cypress",
+  "version": "1.0.0",
+  "description": "Agilizei Spark -  treinamento de automação de testes com Cypress.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmtannus/Automacao-com-Cypress.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jmtannus/Automacao-com-Cypress/issues"
+  },
+  "homepage": "https://github.com/jmtannus/Automacao-com-Cypress#readme",
+  "devDependencies": {
+    "cypress": "^14.4.0",
+    "next": "^15.3.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
