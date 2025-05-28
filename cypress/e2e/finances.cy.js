@@ -11,14 +11,14 @@ context('Dev Finances Agilizei', () => {
 
         cy.get('#transaction .button').click() //id + classe
         cy.get('#description').type('Mesada') //id
-        cy.get('[name=amount]').type('12') //name
+        cy.get('[name=amount]').type('+12') //name - adicionando o sinal de + para entrada
         cy.get('[type=date]').type('2025-05-28') //atributos - formato YYYY-MM-DD
         cy.get('button').contains('Salvar').click() //tipo e valor
 
         // Verificações
         cy.get('table tbody tr').should('have.length', 1) // Verifica se foi criada uma linha na tabela
         cy.get('td.description').should('have.text', 'Mesada') // Verifica a descrição
-        cy.get('td.income').should('have.text', 'R$ 12,00') // Verifica o valor formatado
+        cy.get('td.amount').should('have.text', 'R$ 12,00') // Verifica o valor formatado
     });
     // Cadastrar saídas
     //Remover entradas e saídas
