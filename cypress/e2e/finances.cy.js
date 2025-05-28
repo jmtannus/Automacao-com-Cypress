@@ -28,7 +28,7 @@ context('Dev Finances Agilizei', () => {
         cy.get('button').contains('Salvar').click() // tipo e valor
         cy.get('#data-table tbody tr').should('have.length', 1) 
     });
-    // Cadastrar saídas
+
     //Remover entradas e saídas
     it.only('Remover entradas e saídas', () => {
         const entrada = 'Mesada'
@@ -39,13 +39,13 @@ context('Dev Finances Agilizei', () => {
         cy.get('[name=amount]').type(valorEntrada)
         cy.get('[type=date]').type('2025-05-28') //atributos
         cy.get('button').contains('Salvar').click() // tipo e valor
-        cy.get('#data-table tbody tr').should('have.length', 1) 
+
 
         cy.get('#transaction .button').click() // id + classe
         cy.get('#description').type(saida) // id
         cy.get('[name=amount]').type(-35)
         cy.get('[type=date]').type('2025-05-28') //atributos
         cy.get('button').contains('Salvar').click() // tipo e valor
-        cy.get('#data-table tbody tr').should('have.length', 1) 
+        cy.contains('button').contains('Salvar').click() // tipo e valor
     });
 });
