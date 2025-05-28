@@ -12,6 +12,7 @@ context('Dev Finances Agilizei', () => {
 
     beforeEach(() => {
         cy.visit('https://devfinance-agilizei.netlify.app/')
+        cy.get('#data-table tbody tr').should('have.length', 1)
         cy.get('#transaction .button').click() // id + classe
 
     it('Cadastrar entradas', () => {
@@ -20,22 +21,13 @@ context('Dev Finances Agilizei', () => {
         //- descrever as interações com o cypress
         //- adicionar as asserções necessárias
 
-        // Abre o modal de nova transação
-        
-
-        // Preenche os campos do formulário
+        cy.get('#transaction .button').click() // id + classe
         cy.get('#description').type('Presente') // id
         cy.get('[name=amount]').type(12)
         cy.get('[type=date]').type('2025-05-28') //atributos
-
-        // Salva o formulário
         cy.get('button').contains('Salvar').click() // tipo e valor
-
-        // Aguarda a tabela ser atualizada
-        cy.get('#data-table tbody tr').should('have.length', 1)
-        
+        cy.get('#data-table tbody tr').should('have.length', 1) 
     });
     // Cadastrar saídas
     //Remover entradas e saídas
-    it.only('Cadastrar saídas', () => {
-}); 
+});
