@@ -16,9 +16,9 @@ context('Dev Finances Agilizei', () => {
         cy.get('button').contains('Salvar').click() //tipo e valor
 
         // Verificações
-        cy.get('table tbody tr').should('have.length', 1) // Verifica se foi criada uma linha na tabela
-        cy.get('td.description').should('have.text', 'Mesada') // Verifica a descrição
-        cy.get('td.amount').should('have.text', 'R$ 12,00') // Verifica o valor formatado
+        cy.get('#data-table tbody tr').should('have.length', 1) // Verifica se foi criada uma linha na tabela
+        cy.get('#data-table tbody tr td.description').should('have.text', 'Mesada') // Verifica a descrição
+        cy.get('#data-table tbody tr td.amount').should('have.text', 'R$ 12,00') // Verifica o valor formatado
     });
     // Cadastrar saídas
     //Remover entradas e saídas
