@@ -1,6 +1,10 @@
 //testar site https://devfinance-agilizei.netlify.app/
 /// <reference types="cypress" />
 
+//cy.viewport
+// arquivos de config
+// configs por linha de comando
+
 context('Dev Finances Agilizei', () => {
 
     //hooks
@@ -12,7 +16,7 @@ context('Dev Finances Agilizei', () => {
 
     beforeEach(() => {
         cy.visit('https://devfinance-agilizei.netlify.app/')
-        cy.get('#data-table tbody tr').should('have.length', 1)
+        cy.get('#data-table tbody tr').should('have.length', 0)
 
     it('Cadastrar entradas', () => {
 
