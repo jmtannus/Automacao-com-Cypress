@@ -61,7 +61,7 @@ context('Dev Finances Agilizei', () => {
 
     // estratégia 1: voltar para o elemento parseInt, e avançar para um td img attr
 
-    cy.get(´td.description')
+    cy.get('td.description')
         .contains(saida)
         .parent()
         .find('img[onclick*=remove')
