@@ -1,79 +1,87 @@
-//testar site https://devfinance-agilizei.netlify.app/
-/// <reference types="cypress" />
-
-//cy.viewport
-// arquivos de config
-// configs por linha de comando
-
-context('Dev Finances Agilizei', () => {
-
-    //hooks
-    //trechos que executam antes e depois do teste
-    //before -> antes de todos os testes
-    // beforeEach -> antes de cada teste
-    //after -> depois de todos os testes
-    // afterEach -> depois de cada teste
-
+describe('Transações financeiras', () => {
     beforeEach(() => {
+        cy.viewport(411, 823)
         cy.visit('https://devfinance-agilizei.netlify.app/')
+        
+        // Aguarda a tabela estar visível e então limpa se necessário
+        cy.get('#data-table').should('be.visible').then(() => {
+            cy.get('body').then($body => {
+                if ($body.find('#data-table tbody tr').length) {
+                    cy.get('#data-table tbody tr img[onclick*=remove]')
+                        .each($btn => {
+                            cy.wrap($btn).click()
+                        })
+                }
+            })
+        })
+    })
+  
+    it('Deve adicionar uma entrada', () => {
+        cy.get('#transaction .button').click()
+        cy.get('#description').type('Salário')
+        cy.get('[name=amount]').type('5000')
+        cy.get('[type=date]').type('2025-05-28')
+        cy.contains('button', 'Salvar').click()
+  
+        cy.get('#data-table tbody tr').should('have.length', 1)
+        cy.get('#data-table tbody tr td.description').should('contain', 'Salário')
+        cy.get('#totalDisplay').should('be.visible').and('contain', 'R$ 5.000,00')
+    })
+  
+    it('Deve adicionar uma saída', () => {
+        cy.get('#transaction .button').click()
+        cy.get('#description').type('Aluguel')
+        cy.get('[name=amount]').type('-1500')
+        cy.get('[type=date]').type('2025-05-28')
+        cy.contains('button', 'Salvar').click()
+  
+        cy.get('#data-table tbody tr').should('have.length', 1)
+        cy.get('#data-table tbody tr td.description').should('contain', 'Aluguel')
+        cy.get('#totalDisplay').should('be.visible').and('contain', 'R$ -1.500,00')
+    })
+  
+    it('Deve remover uma transação', () => {
+        // Primeiro adiciona uma transação
+        cy.get('#transaction .button').click()
+        cy.get('#description').type('Para Remover')
+        cy.get('[name=amount]').type('100')
+        cy.get('[type=date]').type('2025-05-28')
+        cy.contains('button', 'Salvar').click()
+        
+        // Então remove
+        cy.get('#data-table tbody tr').should('have.length', 1)
+        cy.get('#data-table tbody tr').first().find('img[onclick*=remove]').click()
         cy.get('#data-table tbody tr').should('have.length', 0)
+        cy.get('#totalDisplay').should('be.visible').and('contain', 'R$ 0,00')
+    })
+  
+    it('Deve validar o total com entradas e saídas', () => {
+        // Adiciona uma entrada
+        cy.get('#transaction .button').click()
+        cy.get('#description').type('Entrada')
+        cy.get('[name=amount]').type('2000')
+        cy.get('[type=date]').type('2025-05-28')
+        cy.contains('button', 'Salvar').click()
 
-    it('Cadastrar entradas', () => {
+        // Verifica se a primeira transação foi adicionada
+        cy.get('#data-table tbody tr').should('have.length', 1)
+        cy.get('#totalDisplay').should('be.visible').and('contain', 'R$ 2.000,00')
 
-        cy.get('#transaction .button').click() // id + classe
-        cy.get('#description').type('Presente') // id
-        cy.get('[name=amount]').type(12) // atributos
-        cy.get('[type=date]').type('2025-05-28') //atributos
-        cy.get('button').contains('Salvar').click() // tipo e valor
+        // Adiciona uma saída
+        cy.get('#transaction .button').click()
+        cy.get('#description').type('Saída')
+        cy.get('[name=amount]').type('-500')
+        cy.get('[type=date]').type('2025-05-28')
+        cy.contains('button', 'Salvar').click()
 
-        cy.get('#data-table tbody tr').should('have.length', 1) 
-    });
+        // Verifica se a segunda transação foi adicionada
+        cy.get('#data-table tbody tr').should('have.length', 2)
 
-    it('Cadastrar saídas', () => {
-
-        cy.get('#transaction .button').click() // id + classe
-        cy.get('#description').type('Presente') // id
-        cy.get('[name=amount]').type(-12) // atributos
-        cy.get('[type=date]').type('2025-05-28') //atributos
-        cy.get('button').contains('Salvar').click() // tipo e valor
-        
-        cy.get('#data-table tbody tr').should('have.length', 1) 
-    });
-
-    //Remover entradas e saídas
-    it.only('Remover entradas e saídas', () => {
-        const entrada = 'Total'
-        const saida = 'KinderOvo'
-
-        cy.get('#transaction .button').click() // id + classe
-        cy.get('#description').type(entrada) // id
-        cy.get('[name=amount]').type(valorEntrada)
-        cy.get('[type=date]').type('2025-05-28') //atributos
-        cy.get('button').contains('Salvar').click() // tipo e valor
-
-
-        cy.get('#transaction .button').click() // id + classe
-        cy.get('#description').type(saida) // id
-        cy.get('[name=amount]').type(-35)
-        cy.get('[type=date]').type('2025-05-28') //atributos
-        cy.get('button').contains('Salvar').click() // tipo e valor
-        
-
-    // estratégia 1: voltar para o elemento parseInt, e avançar para um td img attr
-
-    cy.get('td.description')
-        .contains(saida)
-        .parent()
-        .find('img[onclick*=remove')
-        .click()
-    
-    // estratégia 2: buscar todos os irmãos, e buscar o que tem img + attr
-
-    cy.get('td.description')
-        .contains(saida)
-        .parent()
-        .siblings()
-        .find('img[onclick*=remove')
-        .click()
-    });
-});
+        // Valida o total final
+        cy.get('#totalDisplay')
+            .should('be.visible')
+            .and('not.contain', 'R$ 2.000,00') // Garante que o valor anterior mudou
+            .and('contain', 'R$ 1.500,00')
+    })
+})
+  
