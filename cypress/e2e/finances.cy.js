@@ -31,7 +31,7 @@ context('Dev Finances Agilizei', () => {
 
     //Remover entradas e saídas
     it.only('Remover entradas e saídas', () => {
-        const entrada = 'Mesada'
+        const entrada = 'Total'
         const saida = 'KinderOvo'
 
         cy.get('#transaction .button').click() // id + classe
@@ -46,6 +46,23 @@ context('Dev Finances Agilizei', () => {
         cy.get('[name=amount]').type(-35)
         cy.get('[type=date]').type('2025-05-28') //atributos
         cy.get('button').contains('Salvar').click() // tipo e valor
-        cy.contains('button').contains('Salvar').click() // tipo e valor
+        
+
+    // estratégia 1: voltar para o elemento parseInt, e avançar para um td img attr
+
+    cy.get(´td.description')
+        .contains(saida)
+        .parent()
+        .find('img[onclick*=remove')
+        .click()
+    
+    // estratégia 2: buscar todos os irmãos, e buscar o que tem img + attr
+
+    cy.get('td.description')
+        .contains(saida)
+        .parent()
+        .siblings()
+        .find('img[onclick*=remove')
+        .click()
     });
 });
